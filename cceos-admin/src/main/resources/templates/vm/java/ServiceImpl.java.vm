@@ -1,0 +1,77 @@
+package ${package}.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ${package}.mapper.${className}Mapper;
+import ${package}.domain.${className};
+import ${package}.service.I${className}Service;
+import org.miser.common.support.Convert;
+
+/**
+ * ${tableComment} 服务层实现
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+public class ${className}ServiceImpl implements I${className}Service {
+    @Autowired
+    private ${className}Mapper ${sClassName}Mapper;
+
+    /**
+     * 查询${tableComment}信息
+     *
+     * @param ${primaryKey.sAttrName} ${tableComment}ID
+     * @return ${tableComment}信息
+     */
+    @Override
+    public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.sAttrName}) {
+        return ${sClassName}Mapper.select${className}ById(${primaryKey.sAttrName});
+    }
+
+    /**
+     * 查询${tableComment}列表
+     *
+     * @param ${sClassName} ${tableComment}信息
+     * @return ${tableComment}集合
+     */
+    @Override
+    public List<${className}> select${className}List(${className} ${sClassName}) {
+        return ${sClassName}Mapper.select${className}List(${sClassName});
+    }
+
+    /**
+     * 新增${tableComment}
+     *
+     * @param ${sClassName} ${tableComment}信息
+     * @return 结果
+     */
+    @Override
+    public int insert${className}(${className} ${sClassName}) {
+        return ${sClassName}Mapper.insert${className}(${sClassName});
+    }
+
+    /**
+     * 修改${tableComment}
+     *
+     * @param ${sClassName} ${tableComment}信息
+     * @return 结果
+     */
+    @Override
+    public int update${className}(${className} ${sClassName}) {
+        return ${sClassName}Mapper.update${className}(${sClassName});
+    }
+
+    /**
+     * 删除${tableComment}对象
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int delete${className}ByIds(String ids) {
+        return ${sClassName}Mapper.delete${className}ByIds(Convert.toStrArray(ids));
+    }
+
+}

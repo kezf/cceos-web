@@ -1,0 +1,239 @@
+html {
+    height: 100%
+}
+
+body.signin {
+    height: auto;
+    background: url(../img/login_bg.png) no-repeat center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: #959595;
+}
+
+.signinpanel {
+    max-width: 1452px;
+    padding: 0 128px 0 74px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.signinpanel > .row {
+    margin: 0;
+}
+
+.signinpanel .signupFormCont {
+    display: table;
+    height: 100vh;
+}
+
+.signinpanel .signupImgCont {
+    float: left
+}
+
+.signinpanel .signupMainCont {
+    float: right
+}
+
+.signinpanel .signupFormCont > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.signinpanel > div {
+    background: url(../img/logo_panel.png) no-repeat left center;
+    background-size: 43% auto;
+}
+
+.signinpanel .logopanel {
+    float: none;
+    width: auto;
+    height: auto;
+    padding: 0;
+    background: 0 0;
+    min-height: 100vh;
+
+}
+
+.signinpanel .form-control-cont {
+    height: 52px;
+}
+
+.signinpanel .form-control-cont label {
+    margin-bottom: 0;
+    top: 0;
+    right: 0;
+}
+
+.signinpanel .form-control {
+    display: block;
+    height: 34px;
+    border-color: #d2d2d2;
+}
+
+.signinpanel .form-control:focus {
+    border-color: #488af0 !important;
+}
+
+.signinpanel .form-control.error {
+    border-color: #cc5965 !important;
+}
+
+.signinpanel .form-control-cont > div {
+    position: relative;
+}
+
+.signinpanel .form-control-cont > div:before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 1px;
+    width: 20px;
+    height: 32px;
+    z-index: 2;
+}
+
+.signinpanel .form-control-cont .form-control {
+    color: #333;
+    padding-left: 42px;
+    background-color: #fff;
+}
+
+.signinpanel .form-control-cont .form-control:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+.signinpanel .uname:before {
+    background: url(../img/icon_user.png) no-repeat left center;
+    background-size: 20px 20px;
+}
+
+.signinpanel .pword:before {
+    background: url(../img/icon_password.png) no-repeat left center;
+    background-size: 20px 20px;
+}
+
+.signinpanel .code {
+    background: #fff no-repeat 95% center;
+    color: #333;
+    margin: 0 0 15px 0;
+}
+
+.signinpanel .btn {
+    margin-top: 25px;
+    height: 34px;
+    background-color: #488af0;
+    border-radius: 5px;
+    font-size: 15px;
+    letter-spacing: 5px;
+    margin-bottom: 14px;
+}
+
+.signinpanel .btn:hover {
+    opacity: 0.8
+}
+
+.signinpanel .signupTitle {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: #3d80e6;
+    font-weight: 500;
+}
+
+.signinpanel form {
+    background: rgba(255, 255, 255, 1);
+    -moz-box-shadow: 0 2px 8px rgba(227, 232, 238, .7);
+    -webkit-box-shadow: 0 2px 8px rgba(227, 232, 238, .7);
+    box-shadow: 0 2px 8px rgba(227, 232, 238, .7);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 34px 24px 30px;
+}
+
+.signup-footer {
+    border-top: solid 1px rgba(255, 255, 255, .3);
+    margin: 20px 0;
+    padding-top: 15px
+}
+
+.signinpanel .code-inp .form-control {
+    text-align: center;
+}
+
+.signinpanel .code-img {
+    display: inline-block;
+}
+
+.signinpanel .btn-bar a {
+    color: #959595;
+    font-size: 14px;
+}
+
+.signinpanel .btn-bar a:hover {
+    text-decoration: underline;
+}
+
+.signinpanel .regBtn {
+    float: right;
+}
+
+.signinpanel .icheckbox_square-green-login {
+    width: 16px;
+    height: 16px;
+    background-size: auto 16px;
+}
+
+.signinpanel .icheckbox_square-green-login:hover {
+    background-position: -16px 0;
+}
+
+.signinpanel .icheckbox_square-green-login.checked {
+    background-position: -32px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .signinpanel, .signuppanel {
+        margin: 0 auto;
+        width: 420px !important;
+        padding: 20px
+    }
+
+    .signinpanel form {
+        margin-top: 20px
+    }
+
+    .signup-footer, .signuppanel .form-control {
+        margin-bottom: 10px
+    }
+
+    .signup-footer .pull-left, .signup-footer .pull-right {
+        float: none !important;
+        text-align: center
+    }
+
+    .signinpanel .signin-info ul {
+        display: none
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .signinpanel, .signuppanel {
+        width: auto
+    }
+}
+
+@media screen and (max-width: 1028px) {
+    .signinpanel > div {
+        background: none;
+        text-align: center;
+    }
+
+    .signinpanel .signupMainCont {
+        float: none;
+        display: inline-block;
+        text-align: left;
+    }
+}

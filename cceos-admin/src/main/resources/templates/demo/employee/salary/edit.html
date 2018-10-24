@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/ajax/libs/datapicker/datepicker3.css}" rel="stylesheet"/>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-employee-salary-edit" th:object="${salary}">
+        <input id="salaryId" name="salaryId" th:field="*{salaryId}" type="hidden">
+        <input id="employeeId" name="employeeId" th:field="*{employeeId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">工号：</label>
+            <div class="col-sm-8">
+                <input id="empno" class="form-control" readonly="true" type="text" th:value="*{employee.empno}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">姓名：</label>
+            <div class="col-sm-8">
+                <input id="name" class="form-control" readonly="true" type="text" th:value="*{employee.name}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">部门：</label>
+            <div class="col-sm-8">
+                <input id="dept" class="form-control" readonly="true" type="text" th:value="*{employee.dept.deptName}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">月薪：</label>
+            <div class="col-sm-8">
+                <input id="monthly" name="monthly" th:field="*{monthly}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">薪数：</label>
+            <div class="col-sm-8">
+                <input id="point" name="point" th:field="*{point}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">年薪：</label>
+            <div class="col-sm-8">
+                <input id="yearly" name="yearly" th:field="*{yearly}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">福利：</label>
+            <div class="col-sm-8">
+                <input id="welfare" name="welfare" th:field="*{welfare}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">生效日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="effectiveDate" name="effectiveDate" th:field="*{effectiveDate}" type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">状态：</label>
+            <div class="col-sm-8">
+                <input id="status" name="status" type="hidden" value="0"/>
+                <div class="onoffswitch">
+                    <input id="statusCheckBox" type="checkbox" th:checked="*{status}==0?true:false" class="onoffswitch-checkbox" onclick="change_status()">
+                    <label class="onoffswitch-label" for="statusCheckBox">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script th:src="@{/ajax/libs/datapicker/bootstrap-datepicker.js}"></script>
+<script>
+    $(".input-group.date").datepicker({todayBtn: "linked", keyboardNavigation: !1, forceParse: !1, calendarWeeks: !0, autoclose: !0});
+</script>
+<script type="text/javascript">
+    var prefix = ctx + "demo/employee/salary"
+    $("#form-salary-edit").validate({
+        rules: {
+            monthly: {
+                required: true
+            },
+        }
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-employee-salary-edit').serialize());
+        }
+    }
+
+    function change_status() {
+        $('#status').val($('#statusCheckBox').is(':checked') == true ? 0 : 1);
+    }
+</script>
+</body>
+</html>

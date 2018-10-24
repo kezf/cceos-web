@@ -1,0 +1,64 @@
+package ${package}.mapper;
+
+import ${package}.domain.${className};
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * ${tableComment} 数据层
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Repository
+public interface ${className}Mapper {
+    /**
+     * 查询${tableComment}信息
+     *
+     * @param ${primaryKey.sAttrName} ${tableComment}ID
+     * @return ${tableComment}信息
+     */
+    public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.sAttrName});
+
+    /**
+     * 查询${tableComment}列表
+     *
+     * @param ${sClassName} ${tableComment}信息
+     * @return ${tableComment}集合
+     */
+    public List<${className}> select${className}List(${className} ${sClassName});
+
+    /**
+     * 新增${tableComment}
+     *
+     * @param ${sClassName} ${tableComment}信息
+     * @return 结果
+     */
+    public int insert${className}(${className} ${sClassName});
+
+    /**
+     * 修改${tableComment}
+     *
+     * @param ${sClassName} ${tableComment}信息
+     * @return 结果
+     */
+    public int update${className}(${className} ${sClassName});
+
+    /**
+     * 删除${tableComment}
+     *
+     * @param ${primaryKey.sAttrName} ${tableComment}ID
+     * @return 结果
+     */
+    public int delete${className}ById(${primaryKey.attrType} ${primaryKey.sAttrName});
+
+    /**
+     * 批量删除${tableComment}
+     *
+     * @param ${primaryKey.sAttrName}s 需要删除的数据ID
+     * @return 结果
+     */
+    public int delete${className}ByIds(String[] ${primaryKey.sAttrName}s);
+
+}

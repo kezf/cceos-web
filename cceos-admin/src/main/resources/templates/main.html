@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>首页</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-3">
+        <h2>Hello,Guest</h2>
+        <small>移动设备访问请扫描以下二维码：</small>
+        <br>
+        <br>
+        <div id="qrcode"></div>
+        <br>
+    </div>
+    <div class="col-sm-5">
+        <h2>管理系统</h2>
+        <p>后台管理系统。支持移动客户端访问。</p>
+        <p>
+            <b>当前版本：</b><span>v[[${version}]]</span>
+        </p>
+        <p>
+            <span class="label label-warning">&yen;免费开源</span>
+        </p>
+        <br>
+        <p>
+            <a class="btn btn-success btn-outline" href="https://github.com/kezf" target="_blank">
+                <i class="fa fa-cloud"> </i> 访问源码
+            </a>
+            <a class="btn btn-white btn-bitbucket" href="http://cceos.51cpay.cn" target="_blank">
+                <i class="fa fa-home"></i> 访问主页
+            </a>
+        </p>
+    </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="../static/ajax/libs/jquery-qrcode/jquery.qrcode.min.js" th:src="@{/ajax/libs/jquery-qrcode/jquery.qrcode.min.js}"></script>
+<script th:inline="javascript">
+    jQuery(function () {
+        jQuery('#qrcode').qrcode({width: 200, height: 200, text: [[${hostURL}]]});
+    })
+</script>
+</body>
+</html>

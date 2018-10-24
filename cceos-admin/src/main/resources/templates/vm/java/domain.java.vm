@@ -1,0 +1,29 @@
+package ${package}.domain;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.miser.framework.web.domain.BaseEntity;
+#foreach ($column in $columns)
+#if($column.attrType == 'Date')
+import java.util.Date;
+#break
+#end
+#end
+
+/**
+ * ${tableComment}表 ${tableName}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class ${className} extends BaseEntity {
+	private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+	/** $column.columnComment */
+	private $column.attrType $column.sAttrName;
+#end
+
+}

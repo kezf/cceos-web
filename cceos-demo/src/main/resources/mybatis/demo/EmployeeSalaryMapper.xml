@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.miser.demo.mapper.EmployeeSalaryMapper">
+
+    <resultMap type="EmployeeSalary" id="EmployeeSalaryResult">
+        <id property="salaryId" column="salary_id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="monthly" column="monthly"/>
+        <result property="point" column="point"/>
+        <result property="yearly" column="yearly"/>
+        <result property="welfare" column="welfare"/>
+        <result property="effectiveDate" column="effective_date"/>
+        <result property="status" column="status"/>
+        <association property="employee" column="employee_id" javaType="Employee" resultMap="employeeResult"/>
+    </resultMap>
+
+    <resultMap id="employeeResult" type="Employee">
+        <id property="employeeId" column="employee_id"/>
+        <result property="empno" column="empno"/>
+        <result property="name" column="name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="status" column="emp_status"/>
+        <association property="dept" column="dept_id" javaType="SysDept" resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <sql id="selectEmployeeSalaryVo">
+        select e.employee_id, e.empno, e.name, e.dept_id, e.status as emp_status,
+            es.salary_id, es.employee_id, es.monthly, es.point, es.yearly, es.welfare, es.effective_date, es.status,
+            d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
+        from rdm_employee_salary es inner join rdm_employee e on es.employee_id = e.employee_id
+            left join sys_dept d on e.dept_id = d.dept_id
+    </sql>
+
+    <sql id="selectEmployeeSalaryVoWithOne">
+        select e.employee_id, e.empno, e.name, e.dept_id, e.status as emp_status,
+            es.salary_id, es.employee_id, es.monthly, es.point, es.yearly, es.welfare, es.effective_date, es.status,
+            d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
+        from rdm_employee_salary es right join rdm_employee e on es.employee_id = e.employee_id and es.status = '0'
+            left join sys_dept d on e.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectEmployeeSalaryList" parameterType="EmployeeSalary" resultMap="EmployeeSalaryResult">
+        <include refid="selectEmployeeSalaryVoWithOne"/>
+        <where>
+            <if test="employee != null and employee.name != null and employee.name != ''">AND name LIKE concat('%', #{employee.name}, '%')</if>
+            <if test="employee != null and employee.status != null and employee.status != ''">AND e.status = #{employee.status}</if>
+            <if test="employee != null and employee.deptId != null and employee.deptId != '' and employee.dept != null and employee.dept.parentId != null and employee.dept.parentId != 0">
+                AND e.dept_id IN (SELECT t.dept_id FROM sys_dept t WHERE t.dept_id = #{employee.deptId} OR t.parent_id = #{employee.deptId})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectEmployeeSalaryListByemployeeId" parameterType="Integer" resultMap="EmployeeSalaryResult">
+        <include refid="selectEmployeeSalaryVo"/>
+            where es.employee_id = #{employeeId}
+    </select>
+
+    <select id="selectEmployeeSalaryById" parameterType="Integer" resultMap="EmployeeSalaryResult">
+        <include refid="selectEmployeeSalaryVo"/>
+        where salary_id = #{salaryId}
+    </select>
+
+    <insert id="insertEmployeeSalary" parameterType="EmployeeSalary">
+        insert into rdm_employee_salary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salaryId != null and salaryId != '' ">salary_id,</if>
+            <if test="employeeId != null and employeeId != '' ">employee_id,</if>
+            <if test="monthly != null and monthly != '' ">monthly,</if>
+            <if test="point != null and point != '' ">point,</if>
+            <if test="yearly != null and yearly != '' ">yearly,</if>
+            <if test="welfare != null and welfare != '' ">welfare,</if>
+            <if test="effectiveDate != null and effectiveDate != ''">effective_date,</if>
+            <if test="status != null and status != '' ">status</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salaryId != null and salaryId != '' ">#{salaryId},</if>
+            <if test="employeeId != null and employeeId != ''">#{employeeId},</if>
+            <if test="monthly != null and monthly != ''">#{monthly},</if>
+            <if test="point != null and point != ''">#{point},</if>
+            <if test="yearly != null and yearly != ''">#{yearly},</if>
+            <if test="welfare != null and welfare != ''">#{welfare},</if>
+            <if test="effectiveDate != null and effectiveDate != ''">#{effectiveDate},</if>
+            <if test="status != null and status != ''">#{status}</if>
+        </trim>
+    </insert>
+
+    <update id="updateEmployeeSalary" parameterType="EmployeeSalary">
+        update rdm_employee_salary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="monthly != null and monthly != ''">monthly = #{monthly},</if>
+            <if test="point != null and point != ''">point = #{point},</if>
+            <if test="yearly != null and yearly != ''">yearly = #{yearly},</if>
+            <if test="welfare != null and welfare != ''">welfare = #{welfare},</if>
+            <if test="effectiveDate != null and effectiveDate != ''">effective_date = #{effectiveDate},</if>
+            <if test="status != null and status != ''">status = #{status}</if>
+        </trim>
+        where salary_id = #{salaryId}
+    </update>
+
+    <update id="disabledEmployeeSalaryByemployeeId" parameterType="Integer">
+        update rdm_employee_salary SET
+            status = '1'
+        where employee_id = #{employeeId}
+    </update>
+
+    <delete id="deleteEmployeeSalaryById" parameterType="Integer">
+        delete from rdm_employee_salary where salary_id = #{salaryId}
+    </delete>
+
+    <delete id="deleteEmployeeSalaryByIds" parameterType="String">
+        delete from rdm_employee_salary where salary_id in
+        <foreach item="salaryId" collection="array" open="(" separator="," close=")">
+            #{salaryId}
+        </foreach>
+    </delete>
+
+</mapper>

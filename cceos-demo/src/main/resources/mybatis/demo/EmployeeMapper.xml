@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.miser.demo.mapper.EmployeeMapper">
+
+    <resultMap type="Employee" id="EmployeeResult">
+        <id property="employeeId" column="employee_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="empno" column="empno"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="birthdate" column="birthdate"/>
+        <result property="birthplace" column="birthplace"/>
+        <result property="graduateDate" column="graduate_date"/>
+        <result property="school" column="school"/>
+        <result property="major" column="major"/>
+        <result property="education" column="education"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="formaldate" column="formaldate"/>
+        <result property="grade" column="grade"/>
+        <result property="location" column="location"/>
+        <result property="leftdate" column="leftdate"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <association property="dept" column="dept_id" javaType="SysDept" resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <sql id="selectEmployeeVo">
+        select e.employee_id, e.dept_id, e.empno, e.name, e.sex, e.email, e.phone, e.birthdate, e.birthplace, e.graduate_date, e.school, e.major, e.education, e.hiredate, e.formaldate, e.grade, e.location, e.leftdate, e.status, e.create_by, e.create_time, e.update_by, e.update_time, e.remark,
+            d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
+        from rdm_employee e
+            left join sys_dept d on e.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectEmployeeList" parameterType="Employee" resultMap="EmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        <where>
+            <if test="name != null and name != ''">AND name like concat('%', #{name}, '%')</if>
+            <if test="phone != null and phone != ''">and e.phone like concat('%', #{phone}, '%')</if>
+            <if test="location != null and location != ''">and location = #{location}</if>
+            <if test="status != null and status != ''">and e.status = #{status}</if>
+            <if test="params != null and params.timeType != '' and params.beginTime != ''"><!-- 开始时间检索 -->
+                <if test="params.timeType == 0">
+                    AND date_format(birthdate,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 1">
+                    AND date_format(graduate_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 2">
+                    AND date_format(hiredate,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 3">
+                    AND date_format(formaldate,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 4">
+                    AND date_format(leftdate,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                </if>
+            </if>
+            <if test="params != null and params.timeType != '' and params.endTime != ''"><!-- 结束时间检索 -->
+                <if test="params.timeType == 0">
+                    AND date_format(birthdate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 1">
+                    AND date_format(graduate_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 2">
+                    AND date_format(hiredate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 3">
+                    AND date_format(formaldate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                </if>
+                <if test="params.timeType == 4">
+                    AND date_format(leftdate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                </if>
+            </if>
+            <if test="deptId != null and dept.parentId != null and dept.parentId != 0">
+                AND e.dept_id IN (SELECT t.dept_id FROM sys_dept t WHERE t.dept_id = #{deptId} OR t.parent_id = #{deptId})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectEmployeeById" parameterType="Integer" resultMap="EmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        where employee_id = #{employeeId}
+    </select>
+
+    <insert id="insertEmployee" parameterType="Employee">
+        insert into rdm_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeId != null and employeeId != '' ">employee_id,</if>
+            <if test="deptId != null and deptId != '' ">dept_id,</if>
+            <if test="empno != null and empno != '' ">empno,</if>
+            <if test="name != null and name != '' ">name,</if>
+            <if test="sex != null and sex != '' ">sex,</if>
+            <if test="email != null and email != '' ">email,</if>
+            <if test="phone != null and phone != '' ">phone,</if>
+            <if test="birthdate != null">birthdate,</if>
+            <if test="birthplace != null and birthplace != '' ">birthplace,</if>
+            <if test="graduateDate != null">graduate_date,</if>
+            <if test="school != null and school != '' ">school,</if>
+            <if test="major != null and major != '' ">major,</if>
+            <if test="education != null and education != '' ">education,</if>
+            <if test="hiredate != null">hiredate,</if>
+            <if test="formaldate != null">formaldate,</if>
+            <if test="grade != null and grade != '' ">grade,</if>
+            <if test="location != null and location != '' ">location,</if>
+            <if test="leftdate != null">leftdate,</if>
+            <if test="status != null and status != '' ">status,</if>
+            <if test="createBy != null and createBy != '' ">create_by,</if>
+            <if test="remark != null and remark != '' ">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employeeId != null and employeeId != ''">#{employeeId},</if>
+            <if test="deptId != null and deptId != ''">#{deptId},</if>
+            <if test="empno != null and empno != ''">#{empno},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="birthdate != null">#{birthdate},</if>
+            <if test="birthplace != null and birthplace != ''">#{birthplace},</if>
+            <if test="graduateDate != null">#{graduateDate},</if>
+            <if test="school != null and school != ''">#{school},</if>
+            <if test="major != null and major != ''">#{major},</if>
+            <if test="education != null and education != ''">#{education},</if>
+            <if test="hiredate != null">#{hiredate},</if>
+            <if test="formaldate != null">#{formaldate},</if>
+            <if test="grade != null and grade != ''">#{grade},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="leftdate != null">#{leftdate},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateEmployee" parameterType="Employee">
+        update rdm_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null  ">dept_id = #{deptId},</if>
+            <if test="empno != null  and empno != ''">empno = #{empno},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="birthdate != null">birthdate = #{birthdate},</if>
+            <if test="birthplace != null  and birthplace != ''">birthplace = #{birthplace},</if>
+            <if test="graduateDate != null  ">graduate_date = #{graduateDate},</if>
+            <if test="school != null  and school != ''">school = #{school},</if>
+            <if test="major != null  and major != ''">major = #{major},</if>
+            <if test="education != null  and education != ''">education = #{education},</if>
+            <if test="hiredate != null">hiredate = #{hiredate},</if>
+            <if test="formaldate != null">formaldate = #{formaldate},</if>
+            <if test="grade != null  and grade != ''  ">grade = #{grade},</if>
+            <if test="location != null  and location != ''  ">location = #{location},</if>
+            <if test="leftdate != null  ">leftdate = #{leftdate},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where employee_id = #{employeeId}
+    </update>
+
+    <delete id="deleteEmployeeById" parameterType="Integer">
+        delete from rdm_employee where employee_id = #{employeeId}
+    </delete>
+
+    <delete id="deleteEmployeeByIds" parameterType="String">
+        delete from rdm_employee where employee_id in
+        <foreach item="employeeId" collection="array" open="(" separator="," close=")">
+            #{employeeId}
+        </foreach>
+    </delete>
+
+</mapper>

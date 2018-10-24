@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.miser</groupId>
+        <artifactId>jmiser</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cceos-web</artifactId>
+    <version>1.0.0</version>
+
+    <name>cceos</name>
+    <url>http://cceos.51cpay.cn</url>
+    <description>升腾积分(CC-EOS)管理平台</description>
+
+    <dependencyManagement>
+
+        <dependencies>
+
+            <!-- 管理服务 -->
+            <dependency>
+                <groupId>org.miser</groupId>
+                <artifactId>cceos-admin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 通用模块 -->
+            <dependency>
+                <groupId>org.miser</groupId>
+                <artifactId>cceos-demo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <modules>
+        <module>cceos-admin</module>
+        <module>cceos-demo</module>
+    </modules>
+    <packaging>pom</packaging>
+
+</project>
